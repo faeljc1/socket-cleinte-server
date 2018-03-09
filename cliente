@@ -1,0 +1,41 @@
+package br.com.unifor.sistemasdistribuidos;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class Cliente implements Runnable {
+
+	private String ip;
+	private Integer porta;
+
+	public Cliente(String ip, String porta) {
+		this.ip = ip;
+		this.porta = Integer.parseInt(porta);
+		System.out.println("CLIENTE EM EXECUCAO!!!");
+	}
+
+	@Override
+	public void run() {
+		try {
+			Socket cliente = new Socket(ip, porta);
+			System.out.println("O cliente se conectou ao servidor!");
+
+			Scanner teclado = new Scanner(System.in);
+			PrintStream saida = new PrintStream(cliente.getOutputStream());
+
+			while (teclado.hasNextLine()) {
+				saida.println(teclado.nextLine());
+				saida.flush();
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
