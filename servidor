@@ -1,0 +1,40 @@
+package br.com.unifor.sistemasdistribuidos;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Servidor implements Runnable {
+  private String mensage;
+  private String capitalized;
+
+  public Servidor() {
+    System.out.println("SERVIDOR EM EXECUCAO!!!");
+  }
+
+  @Override public void run() {
+    try {
+      ServerSocket serverSocket = new ServerSocket(5555);
+
+      while (true) {
+        Socket socket = serverSocket.accept();
+
+        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
+
+        mensage = inFromClient.readLine();
+
+        capitalized = mensage.toUpperCase() + "\n";
+
+        System.out.println(capitalized);
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
